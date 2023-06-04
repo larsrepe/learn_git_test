@@ -2,6 +2,10 @@ import java.util.*;
 import java.util.stream.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.sql.*;
 import java.text.NumberFormat;
 
@@ -9,6 +13,8 @@ import java.text.NumberFormat;
 public class DataFileParser {
 
     private static String fileName;
+    private static String directory;
+
     private static String timeStamp;
     private static String inputType;
 
@@ -17,17 +23,40 @@ public class DataFileParser {
 
     public static void main(String[] args) {
 
-        if (args.length > 0) {
+        if (args.length > 1) {
 
-            fileName = args[1];
-            System.out.println("fileName: " + fileName);
+            //fileName = args[1];
+            //System.out.println("fileName: " + fileName);
+
+            directory = args[1];
+            System.out.println("Directory: " + directory);
 
             try {
                 InputType iType = InputType.valueOf(args[0]);
+
+                try {
+                    List<File> files = Files.list(Paths.get(directory))
+                        .map(Path::toFile)
+                        .filter(File::isFile)
+                        .collect(Collectors.toList());
+
+                        //files.forEach(System.out::println);
+
+                        files.forEach(fileTotalPath -> {
+                            System.out.println("InputType: " + iType + " -> " + fileTotalPath);
+                        } );
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             
                 if (iType == InputType.FD) {
                     System.out.println("Input type is forbrugsdata.");
 
+                    
+
+
+                    /*
                     String[] filePathParts = fileName.split("/");
                     System.out.println("FileName: " + filePathParts[filePathParts.length - 1]);
                     
@@ -39,12 +68,13 @@ public class DataFileParser {
                     timeStamp = fileNameParts[1];
 
                     new DataFileParser().go();
+                    */
                     
                 }
                 else if (iType == InputType.PD) {
                     System.out.println("Input type is prisdata.");
 
-                    new DataFileParser().processPriceData();
+                    //new DataFileParser().processPriceData();
                 }
             } catch(IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage());
@@ -62,7 +92,7 @@ public class DataFileParser {
             */
         }
         else {
-            System.out.println("Please enter a filename");
+            System.out.println("Please enter input type and a filename");
         }
 
         //new DataFileParser().go();
