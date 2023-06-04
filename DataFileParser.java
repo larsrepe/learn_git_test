@@ -11,22 +11,13 @@ import java.text.NumberFormat;
 
 
 public class DataFileParser {
-
-    private static String fileName;
+    
     private static String directory;
-
-    private static String timeStamp;
-    private static String inputType;
-
     private enum InputType {CD, PD};
-
 
     public static void main(String[] args) {
 
         if (args.length > 1) {
-
-            //fileName = args[1];
-            //System.out.println("fileName: " + fileName);
 
             directory = args[1];
             System.out.println("Directory: " + directory);
@@ -46,56 +37,22 @@ public class DataFileParser {
 
                             if (iType == InputType.CD) {
                                 System.out.println("Input type is consumption data.");
-                                //new DataFileParser().processConsumptionData(fileTotalPath.toString());
+                                new DataFileParser().processConsumptionData(fileTotalPath.toString());
                             }
                             else if (iType == InputType.PD) {
                                 System.out.println("Input type is price data.");
-                                //new DataFileParser().processPriceData(fileTotalPath.toString());
+                                new DataFileParser().processPriceData(fileTotalPath.toString());
                             }
 
-                        } );
+                        });
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
-            
-                //if (iType == InputType.FD) {
-                //    System.out.println("Input type is forbrugsdata.");
-
-                    /*
-                    String[] filePathParts = fileName.split("/");
-                    System.out.println("FileName: " + filePathParts[filePathParts.length - 1]);
-                    
-                    String myFileName = filePathParts[filePathParts.length - 1];
-
-                    String[] fileNameParts = myFileName.split("[_.]");
-                    System.out.println("string-parts: " + fileNameParts[0] +" - "+ fileNameParts[1] +" - "+ fileNameParts[2]);
-
-                    timeStamp = fileNameParts[1];
-
-                    new DataFileParser().go();
-                    */
-                    
-                //}
-                //else if (iType == InputType.PD) {
-                //    System.out.println("Input type is prisdata.");
-
-                    //new DataFileParser().processPriceData();
-                //}
             } catch(IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage());
                 System.exit(1);
             }
-
-
-            /*
-
-            String[] fileNameParts = fileName.split("[_.]");
-            System.out.println("string-parts: " + fileNameParts[0] +" - "+ fileNameParts[1] +" - "+ fileNameParts[2]);
-
-            timeStamp = fileNameParts[1];
-
-            */
         }
         else {
             System.out.println("Please enter input type and a filename");
@@ -127,8 +84,7 @@ public class DataFileParser {
 
                 String[] splitArray = data.split(",");
                 System.out.println(GetTimeStampOutput(timeStampFromName, Integer.parseInt(splitArray[0].substring(1, 3))) + " - " + splitArray[1]);
-                
-                //InsertElForbrugData(GetTimeStampOutput(timeStampFromName, Integer.parseInt(splitArray[0].substring(1, 3))), Double.parseDouble(splitArray[1]));
+                InsertElForbrugData(GetTimeStampOutput(timeStampFromName, Integer.parseInt(splitArray[0].substring(1, 3))), Double.parseDouble(splitArray[1]));
               }
               lineCount++;
             }
@@ -154,14 +110,7 @@ public class DataFileParser {
 
                 String[] splitArray = data.split(",");
                 System.out.println(splitArray[0].substring(1, splitArray[0].length() - 1) + " - " + splitArray[1].substring(1, splitArray[1].length() -1));
-                
-                //InsertElPrisData(splitArray[0].substring(1, splitArray[0].length() - 1), Double.parseDouble(splitArray[1].substring(1, splitArray[1].length() -1)));
-                
-                //InsertElPrisData(splitArray[0],  Double.valueOf("22.33"));
-
-                //System.out.println(GetTimeStampOutput(timeStamp, Integer.parseInt(splitArray[0].substring(1, 3))) + " - " + splitArray[1]);
-                //System.out.println(splitArray[0].substring(1, 3) + " - " + splitArray[1]);
-                //InsertElForbrugData(GetTimeStampOutput(timeStamp, Integer.parseInt(splitArray[0].substring(1, 3))), Double.parseDouble(splitArray[1]));
+                InsertElPrisData(splitArray[0].substring(1, splitArray[0].length() - 1), Double.parseDouble(splitArray[1].substring(1, splitArray[1].length() -1)));
               }
               lineCount++;
             }
